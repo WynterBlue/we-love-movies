@@ -10,6 +10,12 @@ const addCritic = mapProperties({
     updated_at: "critic.updated_at",
 })
 
+const addCriticToUpdate = mapProperties({
+    organization_name: "critic.organization_name",
+    preferred_name: "critic.preferred_name",
+    surname: "critic.surname",
+})
+
 function list() {
     return knex("reviews as r")
     .join('critics as c', 'r.critic_id', 'c.critic_id')
@@ -23,7 +29,21 @@ function read(reviewId){
         .where({review_id: reviewId})
         .first()
 }
+
+function update(updatedReview){
+    return knex("reviews as r")
+    .where({review_id:updatedReview.review_id})
+    .update(updatedReview, "*")
+    .then(() => {
+        return knex("reviews as r")
+        .select("r.*", "c.*")
+        .join('critics as c', 'r.critic_id', 'c.critic_id')
+        .where({ "r.review_id": updatedReview.review_id })
+        .then(rows => rows.map(addCriticToUpdate))
+    })
+}
 module.exports = {
     list,
-    read
+    read,
+    update
 };

@@ -33,8 +33,22 @@ async function reviewExists(req, res, next) {
     const data = res.locals.review
     res.json({data})
   }
+
+  async function update(req, res, next){
+    const localsReview = res.locals.review
+    const updatedReview = {
+        ...localsReview,
+        ...req.body.data,
+        review_id: localsReview.review_id,
+    }
+    const midData = await reviewsService.update(updatedReview)
+    const data = midData[0]
+    console.log(data)
+    res.json({data})
+  }
   
   module.exports = {
       list:[validateMovie, list],
       read:[reviewExists, read],
+      update:[reviewExists, update]
   }
