@@ -5,8 +5,10 @@ const app = express();
 app.use(express.json())
 
 const moviesRouter = require("./movies/movies.router")
+const reviewsRouter = require("./reviews/reviews.router")
 
 app.use('/movies', moviesRouter)
+app.use('/reviews', reviewsRouter)
 
 
 app.use((req, res, next) => {//path not found
