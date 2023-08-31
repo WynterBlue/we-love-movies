@@ -42,8 +42,15 @@ function update(updatedReview){
         .then(rows => rows.map(addCriticToUpdate))
     })
 }
+
+function destroy(review_id){
+    return knex("reviews")
+        .where({review_id})
+        .del()
+}
 module.exports = {
     list,
     read,
-    update
+    update,
+    delete: destroy,
 };
